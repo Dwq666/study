@@ -2,7 +2,7 @@
 # 并包含子项目。
 #
 cmake_minimum_required (VERSION 3.8)
-project ("data_structure"  VERSION 0.1)
+project ("study"  VERSION 0.1)
 #获取所有源码
 FILE(GLOB_RECURSE SRCCPP "*.cpp" "*.c" "*.h")
 # 添加库源文件
@@ -44,11 +44,11 @@ include_directories("${CMAKE_SOURCE_DIR}/FrameWork/include")
 
 message("Default Resource File ${RESOURCEFILE}") 
 
-add_executable(data_structure  ${LIB_SOURCE})  #WIN32
+add_executable(study  ${LIB_SOURCE})  #WIN32
 
 
 set(LIBDIR "${CMAKE_SOURCE_DIR}/lib/${CMAKE_NAME}/${CMAKE_BUILD_TYPE}/")
-target_link_directories(data_structure PUBLIC ${LIBDIR}/)
+target_link_directories(study PUBLIC ${LIBDIR}/)
 
 set(LIBS
    ${FrameWorkLIBS}
@@ -62,9 +62,9 @@ set(LIBS
 )
 message("default Libs>>>${LIBS}" ) 
 
-target_link_libraries(data_structure ${LIBS} ${EXTLIBS})
+target_link_libraries(study ${LIBS} ${EXTLIBS})
 
-add_custom_command(TARGET data_structure 
+add_custom_command(TARGET study 
                     POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E echo compile Finish ${PROJECT_SOURCE_DIR}/win32/bin/data_structure.exe 
                     VERBATIM
