@@ -34,6 +34,9 @@ public:
 	 void sort_shell(vector<int>& data);
 
 
+public:
+	void functionTest();
+
 };
 
 

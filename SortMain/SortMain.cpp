@@ -202,7 +202,7 @@ void Sort_Algorithm::sort_shell(vector<int>& data)
 }
 
 
-int main()
+void Sort_Algorithm::functionTest()
 {	
 	
 	Sort_Algorithm sortTest;
@@ -264,5 +264,5 @@ int main()
 
 	cout << endl;
 	
-	return 0;
+
 }
