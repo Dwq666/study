@@ -39,6 +39,7 @@ endif()  # "MSVC"
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG  ${PROJECT_SOURCE_DIR}/win32/bin)  
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/win32/bin)  
 
+include_directories("${CMAKE_SOURCE_DIR}/FrameWork/include")
 
 
 message("Default Resource File ${RESOURCEFILE}") 
