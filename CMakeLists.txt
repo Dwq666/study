@@ -66,7 +66,7 @@ target_link_libraries(study ${LIBS} ${EXTLIBS})
 
 add_custom_command(TARGET study 
                     POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E echo compile Finish ${PROJECT_SOURCE_DIR}/win32/bin/data_structure.exe 
+                    COMMAND ${CMAKE_COMMAND} -E echo compile Finish ${PROJECT_SOURCE_DIR}/win32/bin/study.exe
                     VERBATIM
                    ) 
 
