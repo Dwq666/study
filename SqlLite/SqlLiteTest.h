@@ -58,9 +58,9 @@ public:
 	virtual bool isTable();//判断数据表是否存在
 	virtual bool execSql(const CString & aSql);//执行sql语句
 	virtual void querysql(const CString & aSql);//查询sql语句
-	virtual void insertsql(const CString & aSql,vector<vector<void  *> > & lData);
-
-
+	virtual void insertsql(const CString & satabname,vector<vector<void  *> > & vaData);//插入语句
+	virtual void updatesql(const CString& satabname, vector<vector<void*> >& vaData);//更新语句
+	virtual void deletesql(const CString& satabname, const CString& sawheretext);
 
 public:
 	void Sqllitetest();

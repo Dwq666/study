@@ -144,8 +144,7 @@ bool SqlLiteTest::isTable()
 		    	//拼装sql语句，创建数据表
 		    	 CStringA lsql=CStringA("")+"create table "+lText.c_str()+"("+sqlsum.c_str()+")"+"\0";
 		    	 execSql(lsql.c_str());
-		    	 LOGI("创建成功");
-
+		    	 
 		     }
 
 		  }
@@ -243,65 +242,145 @@ void SqlLiteTest::querysql(const CString & aSql)
 
   lText +="]";
   //将查询到的数据放到json文件中
-  FileUtil::SaveDataToFile("E:/jsonTest.json",(BYTE *)lText.c_str(),strlen(lText.c_str()));
-
+ FileUtil::SaveDataToFile("E:/jsonTest.json",(BYTE *)lText.c_str(),strlen(lText.c_str()));
+	
 }
 
 
 
-void SqlLiteTest::insertsql(const CString& aSql, vector<vector<void *> >& lData)
+void SqlLiteTest::insertsql(const CString& satabname, vector<vector<void *> >& vaData)
 {
+	//获取表名
+	CStringA tabname = satabname.AsAnsi().c_str();
 
-	CStringA tabname = aSql.AsAnsi().c_str();
+	//获取数组数据
+	vector<vector<void *> > lvec = vaData;
 
-
-	vector<vector<void *> > lvec = lData;
-
-	string aText;  
-	string lText1 ; 
-	string lText2 ;
+	//定义保存字段名称的字符串,初始化"(" 
+	string slFieldName="(";
+	//定义保存字段值的字符串
+	string slValue ;
 	for (int i = 0; i < lvec.size(); i++)
 	{	
-		lText1 = "(";
-		lText2 = "(";
-		vector<void *> cvec = lvec[i];
-		for (int j = 0; j < cvec.size(); j++)
+		slValue = "(";
+		//获取lvec二维数组的第一行数组
+		vector<void *> vlvec = lvec[i];
+		for (int j = 0; j < vlvec.size(); j++)
 		{	
-			
-			if (j != cvec.size() - 1)
+			//判断i是否为0
+			if (i == 0)
 			{
-				lText1 = lText1 + (char *)cvec[j] + ",";
-				lText2 = lText2 + (char*)cvec[j] + ",";
+			    slFieldName = slFieldName + (char*)vlvec[j] + ",";
+			    slValue = "";
+			//判断j是否循环到最后一个数
+			if (j == vlvec.size() - 1)
+			{	
+				//去掉字符串的最后一个字符
+				slFieldName.pop_back();
+			    slFieldName = slFieldName + ")";
+			}
 			}
 			else
 			{
-				lText1 = lText1 + (char*)cvec[j]+")";
-				lText2 = lText2 + (char*)cvec[j]+")";
+				slValue = slValue + "\"" + (char*)vlvec[j]+"\""+ ",";
+				//判断j是否循环到最后一个数
+				if (j == vlvec.size() - 1)
+				{	
+					//去掉字符串的最后一个字符
+					slValue.pop_back();
+				    slValue = slValue+ ")";
+				}
 			}
-
-			}
-			
-		if (i == 0)
-		{
-			aText = lText1;
-			lText2 = "";
 		}
 		if (i > 0)
-		{
-			LOGI("%s  %s", aText.c_str(), lText2.c_str());
+		{	
+			//拼接sql插入语句
+			CStringA lsql = CStringA("") + "insert into " + tabname.c_str() + " " + slFieldName.c_str() + " " + "values " + slValue.c_str() + ";";
+			//执行拼接好的sql语句
+			execSql(lsql.c_str());
+			
 		}
 		
 		}
-		//CStringA lText3 = CStringA("") + " insert into " + tabname.c_str() + " " + lText1.c_str() + " " + "values" + lText2.c_str() + ";";
-		//LOGI(" %s ", lText3.c_str());
-	
-	
 	}
 
 
+void SqlLiteTest::updatesql(const CString& satabname, vector<vector<void*> >& vaData)
+{
+	//获取表名
+	CStringA sltabname = satabname.AsAnsi().c_str();
+
+	//获取数组数据
+	vector<vector<void*> > lvec = vaData;
+	//定义一个存放字段名称的数组
+	vector<char *> slFieldName;
+	//存放sql语句更换字段值的字符串
+	CStringA slsetText;
+	//存放sql语句条件的字符串
+	CStringA slwhereText;
+	for (int i = 0; i < lvec.size(); i++)
+	{	
+		//初始化
+		slwhereText = "";
+		slsetText = "";
+		vector<void*> vlvec = lvec[i];	
+		for (int j = 0; j < vlvec.size(); j++)
+		{	
+			
+			if (i == 0)
+			{
+				//往数组添加字段名称数据
+				slFieldName.push_back((char *)vlvec[j]);
+			}
+			else
+			{	
+
+				CStringA sltext = CStringA("") + "\"" + (char*)vlvec[j] + "\"";
+				if (j == 0)
+				{	
+					//拼接sql条件语句
+					slwhereText.Append(slFieldName.at(j));
+					slwhereText.Append(" = ");
+					slwhereText.Append(sltext.c_str());
+				}
+				else
+				{	
+					//拼接sql更换值语句
+					slsetText.Append(slFieldName.at(j));
+					slsetText.Append(" = ");
+					slsetText.Append(sltext.c_str());
+					slsetText.Append(" ,");
+					if (j == vlvec.size() - 1)
+					{	
+						string a = slsetText.c_str();
+						//去除字符串的最后一个字符
+						a.pop_back();
+						slsetText = a.c_str();
+					}
+
+				}	
+			}
+		
+		}
+		//拼接sql更新语句
+		CStringA lsql = CStringA("") + "update " + sltabname.c_str() + " set " + slsetText.c_str() + " where " + slwhereText.c_str();
+		//执行sql语句
+		execSql(lsql.c_str());
+	}
+
+}
+
+void SqlLiteTest::deletesql(const CString& satabname, const CString& sawheretext)
+{
+	//获取表名
+	CStringA sltabname = satabname.AsAnsi().c_str();
 
 
 
+
+
+
+}
 
 
 
@@ -313,47 +392,22 @@ void SqlLiteTest::insertsql(const CString& aSql, vector<vector<void *> >& lData)
 void SqlLiteTest::Sqllitetest()
 {
 	SqlLiteTest sqltest;
-	//sqltest.Connect("E:/sqlliteTest.db");
+	sqltest.Connect("E:/sqlliteTest.db");
 
 
-	CString ltest="SqlLiteTest";
-	//sqltest.querysql(ltest);
-	vector<vector<void *>>    lData;
-	lData.push_back({"name","age"});
-	lData.push_back({"张三","19"});
-	lData.push_back({"李四","18"});
-
-
-	sqltest.insertsql(ltest,lData);
-
-	/*for (int i=0;i<lData.size();i++)
-	{
-		lText="";
-		vector<const char*> ll=lData[i];
-		for (int j=0;j<ll.size();j++)
-		{
-			lText = lText+ "\t" + ll[j];
-		}
-	
-	}*/
-
-	/*for (vector<vector<const char*>>::iterator iter = lData.begin(); iter != lData.end(); iter++)
-	{
-		lText = "";
-		vector<const char*> vec_temp = *iter;
-		for (vector<const char*>::iterator it = vec_temp.begin(); it != vec_temp.end(); it++)
-		{
-			lText = lText +"\t"+ * it;
-
-		}
-
-
-		LOGI(" %s", (lText + "\r\n").c_str());
-
-	}*/
-
+	CString sltest="tableTest";
+	vector<vector<void *>>    vlData;
+	vlData.push_back({"id","name","age"});
+	vlData.push_back({"2","李四","255" });
+	vlData.push_back({"3","赵六","30"});
 	
 
+	//sqltest.updatesql(sltest,vlData);
+	//sqltest.insertsql(sltest, vlData);
+	sqltest.querysql("select * from tableTest");
+
+	
+	//sqlite_master
 
 
 
