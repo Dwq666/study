@@ -9,12 +9,12 @@
 #include <stack>
 #include <list>
 #include <cmath>
-#include <algorithm>
 using namespace std;
 
 class Sort_Algorithm
 {
 
+	
 public:
 
 	// 1 选择排序.

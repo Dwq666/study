@@ -17,7 +17,7 @@ void Sort_Algorithm::sort_select(vector<int>& data)
 	
 	if (data.size() < 2)
 		return;
-
+	d
 	//定义最小值下标
 	int min;
 

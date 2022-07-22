@@ -189,6 +189,8 @@ bool SqlLiteTest::execSql(const CString & aSql)
 
 
 
+
+
 void SqlLiteTest::querysql(const CString & aSql)
 {
 
@@ -334,7 +336,6 @@ void SqlLiteTest::updatesql(const CString& satabname, vector<vector<void*> >& va
 			}
 			else
 			{	
-
 				CStringA sltext = CStringA("") + "\"" + (char*)vlvec[j] + "\"";
 				if (j == 0)
 				{	
@@ -360,7 +361,6 @@ void SqlLiteTest::updatesql(const CString& satabname, vector<vector<void*> >& va
 
 				}	
 			}
-		
 		}
 		//拼接sql更新语句
 		CStringA lsql = CStringA("") + "update " + sltabname.c_str() + " set " + slsetText.c_str() + " where " + slwhereText.c_str();

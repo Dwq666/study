@@ -55,7 +55,7 @@ public:
 	SqlLiteTest();
 	virtual ~SqlLiteTest();
 	virtual bool Connect(const CString & aFileName);//连接数据库
-	virtual bool isTable();//判断数据表是否存在
+	virtual bool isTable(); //判断数据表是否存在 
 	virtual bool execSql(const CString & aSql);//执行sql语句
 	virtual void querysql(const CString & aSql);//查询sql语句
 	virtual void insertsql(const CString & satabname,vector<vector<void  *> > & vaData);//插入语句
