@@ -375,14 +375,46 @@ void SqlLiteTest::deletesql(const CString& satabname, const CString& sawheretext
 	//获取表名
 	CStringA sltabname = satabname.AsAnsi().c_str();
 
-
-
-
-
-
+	CStringA slwhereText = sawheretext.AsAnsi().c_str();
+			
+	CStringA lsql = CStringA("") + "delete from " + sltabname.c_str() + " where " + slwhereText.c_str();
+	execSql(lsql.c_str());
+			//LOGI("%s", lsql.c_str());
+	
 }
 
+void SqlLiteTest::createTablesql(const CString& atabname, vector<vector<void*> >& aData)
+{
+	//获取数据表名	
+     CStringA ltabname = atabname.AsAnsi().c_str();
+	
+	//获取数据
+	 vector<vector<void*> > lData = aData;
+	
+	 //存放字段名称拼接的字符串
+	 CStringA slValueTex;
+	 for (int i = 0; i < lData.size(); i++)
+	 {
+			
+		 vector<void*> lvec = lData[i];
+		 for (int j = 0; j < lvec.size(); j++)
+		 {
+		
+			 slValueTex = slValueTex + " " + (char *)lvec[j];
+			 if (j == lvec.size() - 1 && i!= lData.size()-1)
+				 slValueTex.Append(",");
+		 }
+	
+	 }
 
+	 //拼接创建表的sql语句
+	 CStringA lsql = CStringA("") + "create table " + ltabname.c_str() + "(" + slValueTex.c_str() + ")";
+	 //执行sql语句
+	 execSql(lsql.c_str());
+	 
+	 //LOGI("%s", lsql.c_str());
+
+}
 
 
 
@@ -395,17 +427,19 @@ void SqlLiteTest::Sqllitetest()
 	sqltest.Connect("E:/sqlliteTest.db");
 
 
-	CString sltest="tableTest";
-	vector<vector<void *>>    vlData;
-	vlData.push_back({"id","name","age"});
-	vlData.push_back({"2","李四","255" });
-	vlData.push_back({"3","赵六","30"});
-	
+	CString sltest="tableTest1";
+	vector<vector<void *> > vlData;
+	vlData.push_back({"name"});
+	vlData.push_back({"张三"});
+	//vlData.push_back({"age","int","not null"});
+	//vlData.push_back({"adderss","varchar(255)"});
 
 	//sqltest.updatesql(sltest,vlData);
 	//sqltest.insertsql(sltest, vlData);
-	sqltest.querysql("select * from tableTest");
-
+	//sqltest.deletesql(sltest, "name = \"王五\"");
+	//sqltest.createTablesql(sltest, vlData);
+	sqltest.querysql("select * from tableTest1");
+	
 	
 	//sqlite_master
 

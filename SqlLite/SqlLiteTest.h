@@ -61,6 +61,7 @@ public:
 	virtual void insertsql(const CString & satabname,vector<vector<void  *> > & vaData);//插入语句
 	virtual void updatesql(const CString& satabname, vector<vector<void*> >& vaData);//更新语句
 	virtual void deletesql(const CString& satabname, const CString& sawheretext);
+	virtual void createTablesql(const CString& atabname, vector<vector<void*> >& aData);
 
 public:
 	void Sqllitetest();
