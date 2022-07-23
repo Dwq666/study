@@ -1,32 +1,3 @@
-/*==========================================================
-*
-*  APPQuick 原生跨平台开发框架
-*
-*  A low-code native cross-platform development framework encapsulating 
-*   most operating system underlying APIs and Kia graphics engines
-*
-*  一套封装了大多数操作系统底层API和Skia图形引擎的低代码原生跨平台开发框架
-*
-*  ThirdPartyLibTest.cpp
-*
-*  Created on: 2022年7月14日
-*  Author: Daly
-*  
-*  版权所有:深圳市微方创业科技有限公司  
-*  CopyRight:Microsquare Innovative Technology co. 
-*  
-*  The Creative Commons  License (CC) 
-*  
-*  Permission is hereby granted ,to any person obtaining a
-*  copy of this software and associated documentation files
-*  to can be use, copy, modify, merge, publish, distribute,
-*  but not for commercial purposes.
-*  
-*  本框架即时授予CC License ,可以被修改，分发，复制，但不能用于商业用途
-*  
-*  
-*==========================================================
-*/
 #include "Core/aqCore.h"
 #include "ext/TinyXML.h"
 #include "ext/json/json.h"
