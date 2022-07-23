@@ -1,7 +1,7 @@
 #ifndef STACK_QUEUE_H
 #define STACK_QUEUE_H
 
-#include "core/aqcore.h"
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -11,29 +11,24 @@ using namespace std;
 
 class Sta_Que
 {
-
 private:
 	stack<int> ista1, ista2;
-
-
 public:
 
-
 	/*
-	* ÓÃÁ½¸öÕ»ÊµÏÖÒ»¸ö¶ÓÁĞ
-	¶ÓÁĞµÄÉùÃ÷ÈçÏÂ£¬
-	·Ö±ğÍê³ÉÔÚ¶ÓÁĞÎ²²¿²åÈëÕûÊıºÍÔÚ¶ÓÁĞÍ·²¿É¾³ıÕûÊıµÄ¹¦ÄÜ¡£
-	(Èô¶ÓÁĞÖĞÃ»ÓĞÔªËØ£¬deleteHead²Ù×÷·µ»Ø -1)
-	   ista1 Õ»1   £¬ ista2  Õ»2
-
-	   Ë¼Â·£º
-
+	* ç”¨ä¸¤ä¸ªæ ˆå®ç°ä¸€ä¸ªé˜Ÿåˆ—
 	*/
 	void appendTail(int value);
 	int deleteHead();
 
 
-
+	/*
+	* åŒ…å« min å‡½æ•°çš„æ ˆ
+	*/
+	void stapush(int x);
+	void stapop();
+	int statop();
+	int stamin();
 
 
 

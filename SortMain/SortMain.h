@@ -2,7 +2,7 @@
 #define SORTMAIN_H
 
 
-#include "core/aqcore.h"
+
 #include <iostream>
 #include <algorithm>
 #include <vector>

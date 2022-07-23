@@ -424,7 +424,7 @@ void SqlLiteTest::createTablesql(const CString& atabname, vector<vector<void*> >
 void SqlLiteTest::Sqllitetest()
 {
 	SqlLiteTest sqltest;
-	sqltest.Connect("E:/sqlliteTest.db");
+	//sqltest.Connect("E:/sqlliteTest.db");
 
 
 	CString sltest="tableTest1";
@@ -438,12 +438,10 @@ void SqlLiteTest::Sqllitetest()
 	//sqltest.insertsql(sltest, vlData);
 	//sqltest.deletesql(sltest, "name = \"王五\"");
 	//sqltest.createTablesql(sltest, vlData);
-	sqltest.querysql("select * from tableTest1");
+	//sqltest.querysql("select * from tableTest1");
 	
 	
 	//sqlite_master
-
-
 
 	//insert into 10 条数据
 
