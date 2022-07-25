@@ -7,6 +7,7 @@
 #include "ext/sqlite3.h"
 #include "db/serverTable.h"
 #include "db/Query.h"
+#include  <mysql.h>
 
 using  namespace appQuick;
 using  namespace db;

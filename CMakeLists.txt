@@ -3,6 +3,8 @@
 #
 cmake_minimum_required (VERSION 3.8)
 project ("study"  VERSION 0.1)
+
+
 #获取所有源码
 FILE(GLOB_RECURSE SRCCPP "*.cpp" "*.c" "*.h")
 # 添加库源文件
@@ -39,30 +41,41 @@ endif()  # "MSVC"
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG  ${PROJECT_SOURCE_DIR}/win32/bin)  
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/win32/bin)  
 
+
 include_directories("${CMAKE_SOURCE_DIR}/FrameWork/include")
+include_directories("${CMAKE_SOURCE_DIR}/../mysql6/include")
 
 
 message("Default Resource File ${RESOURCEFILE}") 
 
 add_executable(study  ${LIB_SOURCE})  #WIN32
-
-
+ 
+  
 set(LIBDIR "${CMAKE_SOURCE_DIR}/lib/${CMAKE_NAME}/${CMAKE_BUILD_TYPE}/")
-target_link_directories(study PUBLIC ${LIBDIR}/)
+set(MYSQLLIBDIR "${CMAKE_SOURCE_DIR}/../mysql6/lib")
+
+message("study=======>${MYSQLLIBDIR}") 
+
+target_link_directories(study PUBLIC ${LIBDIR} ${MYSQLLIBDIR})
 
 set(LIBS
    ${FrameWorkLIBS}
    jsv8
    Tinyxml
    zlib
-   jsoncpp 
-   pcre
+   jsoncpp  
+   pcre 
    sqllite
    winmm 
 )
 message("default Libs>>>${LIBS}" ) 
 
-target_link_libraries(study ${LIBS} ${EXTLIBS})
+#FILE(GLOB mysqllib "*.lib")
+set(mysqllib
+    libmysql
+)
+
+target_link_libraries(study ${LIBS} ${EXTLIBS} ${mysqllib})
 
 add_custom_command(TARGET study 
                     POST_BUILD
