@@ -17,7 +17,7 @@ int main()
     //Test.Sqllitetest();
     
      DataBese a;
-     a.DataBeseTest();
+      a.DataBeseTest();
     
     system("pause");
 
