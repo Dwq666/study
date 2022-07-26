@@ -2,20 +2,21 @@
 using namespace std;
 using namespace appQuick;
 
-DataBese::DataBese()
+DB_MySql::DB_MySql(const Information* aInf)
 {
     mysql = new MYSQL;
     res = nullptr;
     column = nullptr;
+    Connect(aInf);
 }
 
-DataBese::~DataBese()
+DB_MySql::~DB_MySql()
 {
     mysql_free_result(res);
     mysql_close(mysql);
 }
 
-bool DataBese::Connect(const char* ip, const char* name, const char* cypher, const char* database_name, const int port)
+bool DB_MySql::Connect(const Information* aInf)
 {
    
     //初始化mysql
@@ -25,11 +26,11 @@ bool DataBese::Connect(const char* ip, const char* name, const char* cypher, con
         return false;
 
      //连接参数（初始化mysql返回的句柄，ip地址，用户名，密码，数据库名，端口号）
-     if(mysql_real_connect(mysql, ip, name, cypher, database_name, port, NULL, 0))
+     if(mysql_real_connect(mysql, aInf->ip, aInf->name, aInf->password, aInf->database_name, aInf->port, NULL, 0))
      {  
         //返回连接成功
         mysql_query(mysql, "set names utf8"); //把要执行的sql语句、 返回的结果 转换成utf8  
-        LOGI("Connected succeed\n");
+        LOGI("Connected succeed Mysql\n");
         return true;
      }
     else
@@ -41,7 +42,7 @@ bool DataBese::Connect(const char* ip, const char* name, const char* cypher, con
 
 }
 
-bool DataBese::execsql(const CString & aSql)
+bool DB_MySql::execSql(const CString & aSql)
 {
     if(mysql==NULL)
       return false;
@@ -62,26 +63,23 @@ bool DataBese::execsql(const CString & aSql)
     }
 }
 
-bool DataBese::Query(const CString& table_name)
+bool DB_MySql::querysql(const CString & aSql)
 {
     //判断mysql句柄是否为空
     if(mysql==NULL)
-        return -1;
+        return -1; 
 
-     //获取表名
-    CStringA lstabname = table_name.AsAnsi().c_str();
-
-    //拼接sql语句
-    CStringA lsql = CStringA("")+"select * from "+lstabname.c_str();
-
+    //获取sql语句
+    CStringA lsql = aSql.AsAnsi().c_str();
+    
     //执行sql语句
-    execsql(lsql.c_str());
+    execSql(lsql.c_str());
     
     //获得sql语句结束后返回的结果集
     res = mysql_store_result(mysql);
     if (!res)   
     {
-        printf("Couldn't get result from %s\n", mysql_error(mysql));
+        LOGI("Couldn't get result from %s\n", mysql_error(mysql));
         return false;
     }
 
@@ -127,14 +125,27 @@ bool DataBese::Query(const CString& table_name)
 
 }
 
-
-
-
-void DataBese::DataBeseTest()
+void DB_MySql::insertsql(const CString& satabname,vector<vector<void*> > & vaData)
 {
-    DataBese * sqltest = new DataBese;
-    sqltest->Connect("localhost", "root", "", "test", 3306);
-    sqltest->execsql("delete from Person where id=3");
-    sqltest->Query("Person");
+
+
+
+}
+
+void DB_MySql::updatesql(const CString& satabname, vector<vector<void*> >& vaData)
+{
+
+
+}
+
+ void DB_MySql::deletesql(const CString& satabname, const CString& sawheretext)
+ {
+
+ }
+
+void DB_MySql::DataBeseTest()
+{
+    //sqltest->Connect("localhost", "root", "", "test", 3306);
+    //sqltest->querysql("Person");
     
 }

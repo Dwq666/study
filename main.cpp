@@ -1,23 +1,17 @@
 #include <iostream>
-#include "SortMain/SortMain.h"
-#include "SqlLite/SqlLiteTest.h"
-#include "Stack_Queue/stack_queue.h"
-#include "List/list.h"
-#include "String/string.h"
-#include "Search/search.h"
-#include "MysqlTest/mysqlTest.h"
+#include "Sql/ConnectionSql.h"
 using namespace std;
 
 int main() 
 {  
    
-
-    //Sqllite函数测试
-    //SqlLiteTest Test;
-    //Test.Sqllitetest();
+    Information * inf=new Information("localhost", "root", "", "test", 3306);
     
-     DataBese a;
-      a.DataBeseTest();
+     DB_sql* a = Connection::Connec("MySql",inf);   
+
+    a->querysql("select * from person");
+
+
     
     system("pause");
 

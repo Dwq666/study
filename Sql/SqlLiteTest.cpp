@@ -15,6 +15,7 @@ SqlLiteTest::SqlLiteTest()
 
 {
 	mdb=NULL;
+	
 
 }
 
@@ -162,7 +163,7 @@ bool SqlLiteTest::execSql(const CString & aSql)
 
 
 
-void SqlLiteTest::querysql(const CString & aSql)
+bool SqlLiteTest::querysql(const CString & aSql)
 {
 
   sqlite3_stmt *stmt = NULL;
@@ -216,7 +217,8 @@ void SqlLiteTest::querysql(const CString & aSql)
   lText +="]";
   //将查询到的数据放到json文件中
  FileUtil::SaveDataToFile("E:/jsonTest.json",(BYTE *)lText.c_str(),strlen(lText.c_str()));
-	
+
+	 return true;
 }
 
 
