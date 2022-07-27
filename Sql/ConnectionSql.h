@@ -1,29 +1,42 @@
 #ifndef CONNECTIONSQL_H
 #define CONNECTIONSQL_H
 
-#define ms "MySql"
-#define sl "SqlLite"
 
-#include <iostream>
-#include "core/aqCore.h"
 #include "mysqlTest.h"
+#include "SqlLiteTest.h"
 using namespace appQuick;
 using namespace std;
 
 
-class Connection
+enum dbType  //数据文件格式
+{
+   dbt_mySql, 
+   dbt_sqlLite   
+};
+
+
+//数据库管理
+class dbManager
 {
 public:
-    Connection();
-    ~Connection();
-    static DB_sql* Connec(const char * aType,const Information* aInf)
-    {   
-        DB_sql* a;
-        if(aType == ms)
-        a = new DB_MySql(aInf);            
-        return a;
-    }
+    vector<DB_sql *> mConnects;  //未连接列表，可用表
+public:
+    dbType iType;
+    Information * mOption;     
+public:
+    dbManager(dbType aType,const Information* aInf);
+    //根据传入参数，选择连接
+    DB_sql * GetConnec();
+    void closeConnect(DB_sql * aConn); 
+public:
+    ~dbManager();
+private:
 };
+
+
+
+
+
 
 
 

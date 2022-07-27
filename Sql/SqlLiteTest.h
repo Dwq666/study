@@ -1,15 +1,11 @@
 #ifndef SQLLITETEST_H_
 #define SQLLITETEST_H_
 
-#include <iostream>
-#include "db/MTable/MTable.h"
-#include "db/customdb.h"
+#include "SqlForeign.h"
 #include "ext/sqlite3.h"
 #include "db/serverTable.h"
-#include "db/Query.h"
-#include "core/aqCore.h"
-#include "SqlForeign.h"
 
+using  namespace std;
 using  namespace appQuick;
 using  namespace db;
 
@@ -20,14 +16,14 @@ namespace db {
 class SqlLiteTest:public DB_sql
 {
 public:
-	sqlite3 * mdb;
+	sqlite3 * mdb ;
 	CString sdbFile;
 	CString sPath;
 
 public:
-	SqlLiteTest();
+	SqlLiteTest(const Information* aInf);
 	virtual ~SqlLiteTest();
-	virtual bool Connect(const CString & aFileName);//连接数据库
+	virtual bool Connect(const Information* aInf);//连接数据库
 	virtual bool isTable(); //判断数据表是否存在 
 	virtual bool execSql(const CString & aSql);//执行sql语句
 	virtual bool querysql(const CString & aSql);//查询sql语句

@@ -1,10 +1,9 @@
 #ifndef MYSQLTEST_H
 #define MYSQLTEST_H
 
-#include <mysql.h>
-#include "core/aqCore.h"
-#include <vector>
 #include "SqlForeign.h"
+#include <mysql.h>
+#include <vector>
 using namespace std;
 using namespace appQuick;
 

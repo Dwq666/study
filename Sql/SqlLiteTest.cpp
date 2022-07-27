@@ -11,11 +11,11 @@ using  namespace appQuick;
 using  namespace db;
 using  namespace std;
 
-SqlLiteTest::SqlLiteTest()
+SqlLiteTest::SqlLiteTest(const Information* aInf)
 
 {
 	mdb=NULL;
-	
+	Connect(aInf);
 
 }
 
@@ -27,13 +27,13 @@ SqlLiteTest::~SqlLiteTest()
 }
 
 
-bool SqlLiteTest::Connect(const CString & aFileName)
+bool SqlLiteTest::Connect(const Information* aInf)
 {
 	if (mdb!=NULL)
        sqlite3_close(mdb);
 
 	//打开数据库，连接数据库
-	int rc = sqlite3_open(aFileName.AsAnsi().c_str(), &mdb);
+	int rc = sqlite3_open(aInf->database_name, &mdb);
 	if( rc )
 	{
 		//连接数据库失败
@@ -217,128 +217,28 @@ bool SqlLiteTest::querysql(const CString & aSql)
   lText +="]";
   //将查询到的数据放到json文件中
  FileUtil::SaveDataToFile("E:/jsonTest.json",(BYTE *)lText.c_str(),strlen(lText.c_str()));
-
+	LOGI("查询成功");
 	 return true;
 }
 
 
 
 void SqlLiteTest::insertsql(const CString& satabname, vector<vector<void *> >& vaData)
-{
-	//获取表名
-	CStringA tabname = satabname.AsAnsi().c_str();
-
-	//获取数组数据
-	vector<vector<void *> > lvec = vaData;
-
-	//定义保存字段名称的字符串,初始化"(" 
-	string slFieldName="(";
-	//定义保存字段值的字符串
-	string slValue ;
-	for (int i = 0; i < lvec.size(); i++)
+{	
+	vector<string> svec = Data_Alg::Data_ins(satabname,vaData);
+	for(int i=0;i<svec.size();i++)
 	{	
-		slValue = "(";
-		//获取lvec二维数组的第一行数组
-		vector<void *> vlvec = lvec[i];
-		for (int j = 0; j < vlvec.size(); j++)
-		{	
-			//判断i是否为0
-			if (i == 0)
-			{
-			    slFieldName = slFieldName + (char*)vlvec[j] + ",";
-			    slValue = "";
-			//判断j是否循环到最后一个数
-			if (j == vlvec.size() - 1)
-			{	
-				//去掉字符串的最后一个字符
-				slFieldName.pop_back();
-			    slFieldName = slFieldName + ")";
-			}
-			}
-			else
-			{
-				slValue = slValue + "\"" + (char*)vlvec[j]+"\""+ ",";
-				//判断j是否循环到最后一个数
-				if (j == vlvec.size() - 1)
-				{	
-					//去掉字符串的最后一个字符
-					slValue.pop_back();
-				    slValue = slValue+ ")";
-				}
-			}
-		}
-		if (i > 0)
-		{	
-			//拼接sql插入语句
-			CStringA lsql = CStringA("") + "insert into " + tabname.c_str() + " " + slFieldName.c_str() + " " + "values " + slValue.c_str() + ";";
-			//执行拼接好的sql语句
-			execSql(lsql.c_str());
-			
-		}
-		
-		}
+		execSql(svec[i].c_str());	
 	}
+}
 
 
 void SqlLiteTest::updatesql(const CString& satabname, vector<vector<void*> >& vaData)
-{
-	//获取表名
-	CStringA sltabname = satabname.AsAnsi().c_str();
-
-	//获取数组数据
-	vector<vector<void*> > lvec = vaData;
-	//定义一个存放字段名称的数组
-	vector<char *> slFieldName;
-	//存放sql语句更换字段值的字符串
-	CStringA slsetText;
-	//存放sql语句条件的字符串
-	CStringA slwhereText;
-	for (int i = 0; i < lvec.size(); i++)
+{	
+	vector<string> svec = Data_Alg::Data_upd(satabname,vaData);
+	for(int i=0;i<svec.size();i++)
 	{	
-		//初始化
-		slwhereText = "";
-		slsetText = "";
-		vector<void*> vlvec = lvec[i];	
-		for (int j = 0; j < vlvec.size(); j++)
-		{	
-			
-			if (i == 0)
-			{
-				//往数组添加字段名称数据
-				slFieldName.push_back((char *)vlvec[j]);
-			}
-			else
-			{	
-				CStringA sltext = CStringA("") + "\"" + (char*)vlvec[j] + "\"";
-				if (j == 0)
-				{	
-					//拼接sql条件语句
-					slwhereText.Append(slFieldName.at(j));
-					slwhereText.Append(" = ");
-					slwhereText.Append(sltext.c_str());
-				}
-				else
-				{	
-					//拼接sql更换值语句
-					slsetText.Append(slFieldName.at(j));
-					slsetText.Append(" = ");
-					slsetText.Append(sltext.c_str());
-					slsetText.Append(" ,");
-					if (j == vlvec.size() - 1)
-					{	
-						string a = slsetText.c_str();
-						//去除字符串的最后一个字符
-						a.pop_back();
-						slsetText = a.c_str();
-					}
-
-				}	
-			}
-		}
-		//拼接sql更新语句
-		CStringA lsql = CStringA("") + "update " + sltabname.c_str() + " set " + slsetText.c_str() + " where " + slwhereText.c_str();
-		//执行sql语句
-		execSql(lsql.c_str());
+		execSql(svec[i].c_str());	
 	}
 
 }
@@ -396,7 +296,7 @@ void SqlLiteTest::createTablesql(const CString& atabname, vector<vector<void*> >
 
 void SqlLiteTest::Sqllitetest()
 {
-	SqlLiteTest sqltest;
+	//SqlLiteTest sqltest;
 	//sqltest.Connect("E:/sqlliteTest.db");
 
 
@@ -411,7 +311,7 @@ void SqlLiteTest::Sqllitetest()
 	//sqltest.insertsql(sltest, vlData);
 	//sqltest.deletesql(sltest, "name = \"王五\"");
 	//sqltest.createTablesql(sltest, vlData);
-	//sqltest.querysql("select * from tableTest1");
+	//sqltest.querysql("select * from sltest");
 	
 	
 	//sqlite_master

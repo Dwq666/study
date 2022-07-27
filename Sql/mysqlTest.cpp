@@ -105,8 +105,10 @@ bool DB_MySql::querysql(const CString & aSql)
         //循环打印每行的内容
         for (int i = 0; i < field; i++)
         {   
+        
            string lFiledName = lName[i]; //获取字段名
            string lValue = column[i]; //column是列数组  获取字段值  
+        
             if(i!=field-1)
             {
                 lSumText = lSumText+lFiledName +" : "+lValue+" , ";
@@ -127,20 +129,36 @@ bool DB_MySql::querysql(const CString & aSql)
 
 void DB_MySql::insertsql(const CString& satabname,vector<vector<void*> > & vaData)
 {
-
+    vector<string> svec = Data_Alg::Data_ins(satabname,vaData);
+	
+	for(int i=0;i<svec.size();i++)
+	{	
+		execSql(svec[i].c_str());	
+	}
 
 
 }
 
 void DB_MySql::updatesql(const CString& satabname, vector<vector<void*> >& vaData)
 {
+    vector<string> svec = Data_Alg::Data_upd(satabname,vaData);
+	for(int i=0;i<svec.size();i++)
+	{	
+		execSql(svec[i].c_str());	
+	}
 
 
 }
 
  void DB_MySql::deletesql(const CString& satabname, const CString& sawheretext)
  {
+    //获取表名
+	CStringA sltabname = satabname.AsAnsi().c_str();
 
+	CStringA slwhereText = sawheretext.AsAnsi().c_str();
+			
+	CStringA lsql = CStringA("") + "delete from " + sltabname.c_str() + " where " + slwhereText.c_str();
+	execSql(lsql.c_str());
  }
 
 void DB_MySql::DataBeseTest()

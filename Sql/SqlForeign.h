@@ -19,7 +19,6 @@ public:
         this->port=port;
     }
 
-    
 public:
     //ip地址
     const char* ip;
@@ -48,10 +47,12 @@ public:
 };
 
 
-
-
-
-
+class Data_Alg
+{   
+public:
+    static vector<string> Data_ins(const CString& satabname, vector<vector<void *> >& vaData);
+    static vector<string> Data_upd(const CString& satabname, vector<vector<void *> >& vaData);
+};
 
 
 
