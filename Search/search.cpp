@@ -8,7 +8,7 @@ using namespace std;
 vector<int> search_Algorithm::findRepeatNumber(vector<int>& nums)
 {	
 	//定义一个存放值的哈希表imap
-	map<int, bool> imap;
+	unordered_map<int, bool> imap;
 	int num;
 	//存放重复数字的数组sum
 	vector<int> sum;
@@ -107,5 +107,34 @@ bool search_Algorithm::findNumberIn2DArray(vector<vector<int>>& matrix, int targ
 
 	return false;
 
-
 }
+
+
+/**
+ * 在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母
+ * 
+ */
+ char search_Algorithm::firstUniqChar(string s)
+ {	
+	//定义一个哈希数组
+	unordered_map<char,bool> lcbmap;
+	char j;
+	//循环字符串s
+	for(int i=0 ;i<s.size();i++)
+	{	
+		//定义j 获得 字符串s的 子字符串
+		 j = s[i];
+		//  lmap.find(j)==lmap.end() --> 判断lmanp[j]是否在哈希数组中有相同的，找到相同的返回false ，没有相同的返回true
+		lcbmap[j] = lcbmap.find(j)==lcbmap.end();
+
+	}
+
+	for(int i=0 ;i<s.size();i++)
+	{	
+		 j = s[i];
+		if(lcbmap[j])
+		 return j;
+	}
+
+	return ' '; 
+ }

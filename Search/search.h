@@ -6,7 +6,7 @@
 #include <vector>
 #include <stack>
 #include <queue>
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 class search_Algorithm
@@ -39,6 +39,12 @@ public:
 	bool findNumberIn2DArray(vector<vector<int>>& matrix, int target);
 
 
+	/**
+	 * 第一个只出现一次的字符
+	 * 
+	 */
+
+	 char firstUniqChar(string s);
 	
 
 };
