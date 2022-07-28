@@ -40,6 +40,15 @@ public:
 
 
 	/**
+	 * 旋转数组的最小数字
+	 * 
+	 */
+
+	int minArray(vector<int>& numbers);
+	
+
+
+	/**
 	 * 第一个只出现一次的字符
 	 * 
 	 */

@@ -109,6 +109,24 @@ bool search_Algorithm::findNumberIn2DArray(vector<vector<int>>& matrix, int targ
 
 }
 
+/**
+ * 给你一个可能存在 重复 元素值的数组 numbers ，它原来是一个升序排列的数组，并按上述情形进行了一次旋转.
+ * 请返回旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为 1
+ * 
+ */
+int search_Algorithm::minArray(vector<int>& numbers)
+{
+	int i=0, j=numbers.size()-1;
+	while(j>=0 && numbers[i]>=numbers[j])
+	{
+		i=j;
+		j--;
+	}
+
+	return numbers[i];
+
+}
+
 
 /**
  * 在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母
