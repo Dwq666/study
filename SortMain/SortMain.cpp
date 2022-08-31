@@ -101,13 +101,13 @@ void Sort_Algorithm::sort_bubble(vector<int> &data)
 
 /**
  * 递归快速排序
- * 
+ *
  *  // 思想：
-    // 在元素序列上直接操作;
-    // 每次在无序序列中选取一个数,一般称之为中轴数,
-    // 将元素序列分成两个部分,使得一部分的元素全都小于等于另一部分的所有元素;
-    // 也就是说将序列分成小于等于中轴数和大于等于中轴数的两部分,使得中轴数变为有序;
-    // 再递归的对分成的两部分进行划分操作.
+	// 在元素序列上直接操作;
+	// 每次在无序序列中选取一个数,一般称之为中轴数,
+	// 将元素序列分成两个部分,使得一部分的元素全都小于等于另一部分的所有元素;
+	// 也就是说将序列分成小于等于中轴数和大于等于中轴数的两部分,使得中轴数变为有序;
+	// 再递归的对分成的两部分进行划分操作.
  *
  */
 
@@ -149,6 +149,54 @@ int Sort_Algorithm::partition(vector<int> &data, int left, int right)
 }
 
 /**
+ *   非递归利用栈来实现.
+	 利用栈来存储子序列的起点后终点(其实递归也是通过调用系统堆栈来保护调用现场的)
+ */
+void Sort_Algorithm::sort_quick_Norecursive(std::vector<int> &data, int left, int right)
+{
+	if (left < right)
+	{
+		// 找到中轴数的索引.
+		int index = partition(data, left, right);
+
+		// 如果中轴数索引两个分区存在,则将起点和终点入栈.
+		stack<int> ista;
+		if (index - 1 > left)
+		{
+			// 下面的入栈顺序要和此处一致.
+			ista.push(left);
+			ista.push(index - 1);
+		}
+		if (index + 1 < right)
+		{
+			ista.push(index + 1);
+			ista.push(right);
+		}
+		// 从栈里面取出序列并找到该序列中轴数的正确索引.
+		while (!ista.empty())
+		{
+			// 注意顺序.
+			int r = ista.top();
+			ista.pop();
+			int l = ista.top();
+			ista.pop();
+			index = partition(data, l, r);
+			// 将新的序列区间入栈.
+			if (index - 1 > l)
+			{
+				ista.push(l);
+				ista.push(index - 1);
+			}
+			if (index + 1 < r)
+			{
+				ista.push(index + 1);
+				ista.push(r);
+			}
+		}
+	}
+}
+
+/**
 	* 希尔排序
 	*
 	*
@@ -186,6 +234,69 @@ void Sort_Algorithm::sort_shell(vector<int> &data)
 	}
 }
 
+/**
+ *   // 思想：
+	// 归并排序这里不再是直接在原始序列上进行操作;
+	// 归并排序利用的是分而治之的思想,将序列分成两个子序列,将两个子序列排好序后合并为有序的序列;
+	// 而对两个子序列进行排序同样用分而治之,如此递归下去;
+	// 归并分为三步：分,治,合;治是关键,而治又是最简单的,将序列分为只有一个元素的两个子序列后自然变得有序;
+	// 所以归并可以分为两步：将序列一直分成只有一个元素的子序列,然后将这些有序的子序列合并.
+ *
+ */
+void Sort_Algorithm::sort_merge_recursive(vector<int> &data, int left, int right)
+{
+	if (left < right)
+	{
+		// 将序列一分为二并获取中间位置.
+		int mid = (left + right) / 2;
+		// 递归处理两个子序列使之有序.
+		sort_merge_recursive(data, left, mid);
+		sort_merge_recursive(data, mid + 1, right);
+		// 合并两个有序子序列后结束归并排序.
+		merge(data, left, mid, right);
+	}
+}
+
+void Sort_Algorithm::merge(vector<int> &data, int left, int mid, int right)
+{
+	// 将有序的两个子序列合并.
+	// 获取两个子序列的第一个元素.
+	int i = left;
+	int j = mid + 1;
+	// 创建临时容器来保存合并结果,同时指定容器大小.
+	vector<int> ivec;
+	ivec.resize(right - left + 1);
+	// 开始合并.
+	int k = 0;
+	while (i <= mid && j <= right)
+	{
+		if (data.at(i) <= data.at(j))
+		{
+			ivec.at(k++) = data.at(i++);
+		}
+		else
+		{
+			ivec.at(k++) = data.at(j++);
+		}
+	}
+	// 到此为止肯定有一个子序列已经完全放到临时容器里,现在将另子序列的元素放入临时容器.
+	while (i <= mid)
+	{
+		ivec.at(k++) = data.at(i++);
+	}
+
+	while (j <= right)
+	{
+		ivec.at(k++) = data.at(j++);
+	}
+
+	// 最后将临时容器里的元素复制到原容器完成合并.
+	for (int n = 0; n < k; n++)
+	{
+		data.at(left++) = ivec.at(n);
+	}
+}
+
 void Sort_Algorithm::functionTest()
 {
 
@@ -220,16 +331,23 @@ void Sort_Algorithm::functionTest()
 	//冒泡排序
 	// sortTest.sort_bubble(ivec);
 
-	//快速排序
-	int left = 0;
-	int right = ivec.size() - 1;
-	sortTest.sort_quick_recursive(ivec, left, right);
+	//递归快速排序
+	// int left = 0;
+	// int right = ivec.size() - 1;
+	// sortTest.sort_quick_recursive(ivec, left, right);
+	//非递归快速排序
+	// sortTest.sort_quick_Norecursive(ivec, left, right);
 
 	//插入排序
 	// sortTest.sort_insert(ivec);
 
 	//希尔排序
 	// sortTest.sort_select(ivec);
+
+	//归并排序-递归
+	int left = 0;
+	int right = ivec.size() - 1;
+	sortTest.sort_merge_recursive(ivec, left, right);
 
 	cout << "排序后" << endl;
 	//遍历数组排序后

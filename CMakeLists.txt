@@ -40,7 +40,7 @@ endif()  # "MSVC"
 #分别设置输出路径，避免自动增加debug 或者 release 目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG  ${PROJECT_SOURCE_DIR}/win32/bin)  
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/win32/bin)  
-
+   
 
 include_directories("${CMAKE_SOURCE_DIR}/FrameWork/include")
 include_directories("${CMAKE_SOURCE_DIR}/../mysql6/include")
