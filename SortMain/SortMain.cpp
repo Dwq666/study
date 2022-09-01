@@ -301,6 +301,19 @@ void Sort_Algorithm::merge(vector<int> &data, int left, int mid, int right)
 	}
 }
 
+
+
+
+void Sort_Algorithm::sort_heap(vector<int> &data)
+{
+	
+}
+
+
+
+
+
+
 void Sort_Algorithm::functionTest()
 {
 
