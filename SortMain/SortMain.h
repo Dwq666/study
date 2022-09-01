@@ -13,7 +13,6 @@ class Sort_Algorithm
 {
 
 public:
-
 	// 1 选择排序.
 	void sort_select(vector<int> &data);
 
@@ -36,6 +35,11 @@ public:
 	// 6.1 归并排序-递归实现
 	void sort_merge_recursive(vector<int> &data, int left, int right);
 	void merge(vector<int> &data, int left, int mid, int right);
+
+	// 7堆排序
+	void sort_heap(vector<int> &data);
+	void down_adjust(vector<int> &data, int parent, int length);
+	void up_adjust(vector<int> &data, int length);
 
 public:
 	void functionTest();

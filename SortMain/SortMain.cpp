@@ -29,10 +29,9 @@ void Sort_Algorithm::sort_select(vector<int> &data)
 			if (data.at(min) > data.at(j))
 				min = j;
 		}
+	
 		//替换
-		int temp = data.at(i);
-		data.at(i) = data.at(min);
-		data.at(min) = temp;
+		swap(data.at(i), data.at(min));
 	}
 }
 
@@ -86,16 +85,21 @@ void Sort_Algorithm::sort_bubble(vector<int> &data)
 
 	for (int i = 0; i < data.size(); i++)
 	{
+		//设定⼀个标记，若为false，则表示此次循环没有进⾏交换，也就是待排序列已经有序，排序已经完成。
+		bool bIsSwap = false;
 		for (int j = 0; j < data.size() - i - 1; j++)
 		{
 			// 无序区前一个元素大于它的后一个元素,交换位置
 			if (data.at(j) > data.at(j + 1))
 			{
-				int temp = data.at(j + 1);
-				data.at(j + 1) = data.at(j);
-				data.at(j) = temp;
+				swap(data.at(j), data.at(j + 1));
+				bIsSwap = true;
 			}
 		}
+
+		//没有数据交集，提前退出
+		if (!bIsSwap)
+			break;
 	}
 }
 
