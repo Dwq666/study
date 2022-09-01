@@ -36,7 +36,7 @@ public:
 	void sort_merge_recursive(vector<int> &data, int left, int right);
 	void merge(vector<int> &data, int left, int mid, int right);
 
-	// 7堆排序
+	// 7  堆排序
 	void sort_heap(vector<int> &data);
 	void down_adjust(vector<int> &data, int parent, int length);
 	void up_adjust(vector<int> &data, int length);
