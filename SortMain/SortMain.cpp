@@ -29,7 +29,7 @@ void Sort_Algorithm::sort_select(vector<int> &data)
 			if (data.at(min) > data.at(j))
 				min = j;
 		}
-	
+
 		//替换
 		swap(data.at(i), data.at(min));
 	}
@@ -239,6 +239,10 @@ void Sort_Algorithm::sort_shell(vector<int> &data)
 }
 
 /**
+ *
+ *  归并排序
+ *
+ *
  *   // 思想：
 	// 归并排序这里不再是直接在原始序列上进行操作;
 	// 归并排序利用的是分而治之的思想,将序列分成两个子序列,将两个子序列排好序后合并为有序的序列;
@@ -301,18 +305,194 @@ void Sort_Algorithm::merge(vector<int> &data, int left, int mid, int right)
 	}
 }
 
-
-
-
+/**
+ *  堆排序
+ *
+ // 思想：
+	// 在原始序列上直接操作.
+	// 利用二叉堆的数据结构来实现排序,二叉堆是一个完全二叉数.
+	// 二叉堆的特点是堆顶元素是一个最值(大顶堆的堆顶为最大值,小顶堆的堆顶为最小值);
+	// 大顶堆：任意节点的元素都要大于他的子节点元素,小顶堆：任意节点的元素都要小于他的子节点元素.
+	// 排序方法是将堆顶元素和最后一个元素交换,然后恢复大/小顶堆;再将堆顶元素和最后第二个元素交换,以此类推.
+	// 排序第一步是需要将原始数据构建乘二叉堆(升序排序构建大顶堆,降序排序构建小顶堆),我们升序排序所以构建大顶堆;
+	// 第二步是调整使之重新成为大顶堆,我们使用从最后一个非叶子节点往上进行下沉处理(down_adjust()).
+	// 此处我们提供了二叉堆的插入元素后维护二叉堆的操作,采用上浮处理(up_adjust).
+ *
+ */
 void Sort_Algorithm::sort_heap(vector<int> &data)
 {
-	
+	int length = data.size();
+	// 对每一个非叶结点进行堆调整(从最后一个非叶结点(最后一个节点的父节点)开始)
+	for (int i = length / 2 - 1; i >= 0; i--)
+	{
+		down_adjust(data, i, length);
+	}
+
+	for (int i = length - 1; i > 0; i--)
+	{
+		// 将当前最大的放置到数组末尾
+		swap(data.at(0), data.at(i));
+		// 将未完成排序的部分继续进行堆排序
+		down_adjust(data, 0, i);
+	}
 }
 
+void Sort_Algorithm::down_adjust(vector<int> &data, int parent, int length)
+{
+	//获取左子节点下标
+	int lson = 2 * parent + 1;
+	//获取右子节点下标
+	int rson = 2 * parent + 2;
+	int maxId = parent;
+	if (lson < length && data.at(maxId) < data.at(lson))
+		maxId = lson;
+	if (rson < length && data.at(maxId) < data.at(rson))
+		maxId = rson;
+	// 如果maxIdx的值有更新
+	if (maxId != parent)
+	{
+		//交换父子节点元素
+		swap(data.at(parent), data.at(maxId));
+		// 递归调整其他不满足堆性质的部分
+		down_adjust(data, maxId, length);
+	}
+}
+
+/**
+ * @brief
+ *
+ * // 思想：
+	// 计数排序的思想比较新颖,不再是基于元素之间的比较,而是将待排序序列的元素当作容器的索引,记录索引出现的次数;
+	// 比如临时容器的a[i] = n,表示元素i出现n次;
+	// 记录玩出现次数之后,将临时容器从小到大将元素汇总起来,则变为有序;
+	// 我的方法是有所改进,临时容器记录的不是元素出现的次数,而是记录小于等于该元素的元素个数;
+	// 这样做的优点是可以保证稳定排序.
+	// 计数排序的缺点：只能对整数序列进行排序,而且不适合最大元素和最小元素差得很大的情况（为什么呢）.
+
+ */
+void Sort_Algorithm::sort_count(vector<int> &data)
+{
+	int length = data.size();
+	//取最大值和最小值
+	int max = data.at(0);
+	int min = data.at(0);
+	for (int i = 0; i < length; i++)
+	{
+		if (data.at(i) > max)
+			max = data.at(i);
+		if (data.at(i) < min)
+			min = data.at(i);
+	}
+	//取最大值和最小值的差值
+	int difference = max - min;
+
+	// 2.创建统计容器,并遍历待排序序列进行统计元素出现的次数.
+	// 容器元素默认值为0.
+	vector<int> iCountData;
+	iCountData.resize(difference + 1);
+	for (int i = 0; i < length; i++)
+	{
+		// min值作为一个偏移量的角色.
+		++iCountData.at(data.at(i) - min);
+	}
+
+	// 3.改进以实现稳定排序,对统计容器做变形,统计容器元素存的不再是待排序元素出现的次数,
+	// 而是记录小于等于该索引的元素个数.
+	int sum = 0;
+	for (auto &value : iCountData)
+	{
+		sum += value;
+		value = sum;
+	}
+
+	// 4.倒序遍历原始待排序序列,从统计容器中找到正确位置输出到结果容器,
+	vector<int> sorted_data;
+	sorted_data.resize(data.size());
+	for (int i = data.size() - 1; i >= 0; i--)
+	{
+		// data.at(i)-min是当前元素与最小值的差值,
+		// 以差值作为count_data的索引值,则count_data.at(data.at(i)-min)代表小于等于当前元素data.at(i)的个数,
+		// 所以count_data(data.at(i)-min)-1表示当前元素data.at(i)的升序序号.
+		// 将当前元素data.at(i)放入sorted_data的正确的位置上.
+		sorted_data.at(iCountData.at(data.at(i) - min) - 1) = data.at(i);
+		// 随后更新统计容器的元素值,这和倒序遍历是实现稳定排序的关键.
+		--iCountData.at(data.at(i) - min);
+	}
+	// 5.最后将已排序容器赋给原始序列,排序结束.
+	data = sorted_data;
+}
+
+void Sort_Algorithm::sort_bucket(vector<int> &data)
+{
+	// 1.遍历待排序序列获取其中最大值和最小值,并计算他们的差值d
+	int max = data.at(0);
+	int min = data.at(0);
+	for (int i = 1; i < static_cast<int>(data.size()); i++)
+	{
+		if (max < data.at(i))
+		{
+			max = data.at(i);
+		}
+		if (min > data.at(i))
+		{
+			min = data.at(i);
+		}
+	}
+	//取最大值和最小值的差值
+	int difference = max - min;
+	// 2.初始化桶,桶因为要频繁插入元素,所以用List数据结构,然后所有的桶放在vector容器中.
+	vector<list<int>> iBucketList;
+	// 我们将桶的个数设置为原序列元素个数.
+	int iBucketNum = data.size();
+	iBucketList.resize(iBucketNum);
+	// 3.遍历原序列,将元素放到合适的桶中.
+	for (int value : data)
+	{
+		// 定位元素所属的桶的索引.
+		// 桶所有的桶平均划分最大值和最小值d的区间,value-min是当前元素与最小值的差值(区间).
+		// bucket_num-1是总的区间个数,则d/(bucket_num-1)代表一个区间的长度.
+		// 那么整个表达式得到的index则为当前元素value所跨越的区间个数,也就是当前元素所在的桶的索引
+		int index = (value - min) / (difference / (iBucketNum - 1));
+		iBucketList.at(index).push_back(value);
+	}
+
+	// 4.对每个桶进行排序,我们采用快速排序.
+	// 依次将每个桶里的元素排好序后放入sorted_sequence中.
+	vector<int> iSorted_sequence;
+	for (auto bucket : iBucketList)
+	{
+		// 因为我们之前写的快排是对vector<int>进行排序,所以我们使用一个辅助容器.
+		// 我们完全可以重新写一个针对list<int>的快排算法,这样会提高时间和空间复杂度,此处我们就使用现成的（非递归快排）
+		vector<int> auxiliary;
+		auxiliary.assign(bucket.begin(), bucket.end());
+		sort_quick_Norecursive(auxiliary, 0, auxiliary.size() - 1);
+		// 将当前桶内元素排好序后放入sorted_sequence容器尾部.
+		iSorted_sequence.insert(iSorted_sequence.end(), auxiliary.begin(), auxiliary.end());
+	}
+	// 5.将有序序列赋给data.
+	data = iSorted_sequence;
+}
+
+/**
+ * @brief 
+ * 
+ *  // 思想：
+    // 使用了桶排序中桶的思想,但它比桶排序更精明,它只需要十个桶,因为他的排序思想是分别对元素中的个位,十位,百位....进行排序.
+    // 也就是说,首先对所有数以个位数的大小进行排序,然后再对所有数以他们的十位数进行排序,依次类推.
+    // 在整个过程中会使得原始序列逐渐趋近有序,待将最高位排完之后完全有序.
+    // 想想为什么是从个位开始而不是从最高位开始呢,按道理从最高位开始的话每次都能得出一部分数的正确大小关系.
+    // 确实可以从最高位开始,而且可以减少比较次数,但是从最高位开始会有一个致命缺点,那就是在如果从高位开始,在对高位相同的
+    // 数继续排序时,又需要另外创建十个桶对他们排序,其实也就是说最终的结果就是真多每一个不同的元素都会为它创建一个桶,
+    // 如果待排序序列有10000个不同的元素,那么从高位开始比较的方法就需要创建10000个桶,而从个位开始比较的方法可以重复使用
+    // 那10个桶,如果序列个数更多那么这样的性能差异就更明显,所以虽然减少了比较次数但浪费了非常多的空间,得不偿失.
+    // 所以我们说基数排序的话都默认的是从个位开始比较的.
+ */
 
 
+void Sort_Algorithm::sort_radix(vector<int> &data)
+{
 
-
+}
 
 void Sort_Algorithm::functionTest()
 {
@@ -362,9 +542,18 @@ void Sort_Algorithm::functionTest()
 	// sortTest.sort_select(ivec);
 
 	//归并排序-递归
-	int left = 0;
-	int right = ivec.size() - 1;
-	sortTest.sort_merge_recursive(ivec, left, right);
+	// int left = 0;
+	// int right = ivec.size() - 1;
+	// sortTest.sort_merge_recursive(ivec, left, right);
+
+	//堆排序
+	// sortTest.sort_heap(ivec);
+
+	//计数排序
+	// sortTest.sort_count(ivec);
+
+	//桶排序
+	sortTest.sort_bucket(ivec);
 
 	cout << "排序后" << endl;
 	//遍历数组排序后

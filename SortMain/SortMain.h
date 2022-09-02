@@ -41,6 +41,15 @@ public:
 	void down_adjust(vector<int> &data, int parent, int length);
 	void up_adjust(vector<int> &data, int length);
 
+	// 8 计数排序
+	void sort_count(vector<int> &data);
+
+	// 9 桶排序.
+	void sort_bucket(vector<int> &data);
+
+	// 10 基数排序.
+	void sort_radix(vector<int> &data);
+
 public:
 	void functionTest();
 };
