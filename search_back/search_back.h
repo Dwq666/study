@@ -17,12 +17,9 @@ struct TreeNode
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-class CSearchBack
-{
-public:
     //从上到下打印二叉树
     vector<int> levelOrder(TreeNode *root);
     
-};
+
 
 #endif

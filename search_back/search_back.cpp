@@ -6,7 +6,7 @@
  * @param root 二叉树数据结构
  * @return vector<int>
  */
-vector<int> CSearchBack::levelOrder(TreeNode *root)
+vector<int> levelOrder(TreeNode *root)
 {
     vector<int> iRes;       //定义打印数组
     queue<TreeNode *> mQue; //插入二叉树值的队列
@@ -27,7 +27,7 @@ vector<int> CSearchBack::levelOrder(TreeNode *root)
             mQue.push(node->left);
         if (node->right != nullptr)
             mQue.push(node->right);
-    }
+    }   
    
     return iRes;
 }
