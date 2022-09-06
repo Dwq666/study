@@ -28,6 +28,6 @@ vector<int> CSearchBack::levelOrder(TreeNode *root)
         if (node->right != nullptr)
             mQue.push(node->right);
     }
-
+   
     return iRes;
 }
