@@ -20,8 +20,15 @@ struct TreeNode
     //从上到下打印二叉树
     vector<int> levelOrder(TreeNode *root);
 
-    vector<int> levelOrder2(TreeNode *root);
-    vector<int> levelOrder3(TreeNode *root);
+    //从上到下打印二叉树 II
+    vector<vector<int> > levelOrder2(TreeNode *root);
+
+    //从上到下打印二叉树 III
+    vector<vector<int> > levelOrder3(TreeNode *root);
+
+    //树的子结构
+    bool isSubStructure(TreeNode* A, TreeNode* B);
+    bool recur(TreeNode* A, TreeNode* B);
     
 
 
