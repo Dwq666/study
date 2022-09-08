@@ -17,19 +17,23 @@ struct TreeNode
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-    //从上到下打印二叉树
-    vector<int> levelOrder(TreeNode *root);
+//从上到下打印二叉树
+vector<int> levelOrder(TreeNode *root);
 
-    //从上到下打印二叉树 II
-    vector<vector<int> > levelOrder2(TreeNode *root);
+//从上到下打印二叉树 II
+vector<vector<int>> levelOrder2(TreeNode *root);
 
-    //从上到下打印二叉树 III
-    vector<vector<int> > levelOrder3(TreeNode *root);
+//从上到下打印二叉树 III
+vector<vector<int>> levelOrder3(TreeNode *root);
 
-    //树的子结构
-    bool isSubStructure(TreeNode* A, TreeNode* B);
-    bool recur(TreeNode* A, TreeNode* B);
-    
+//树的子结构
+bool isSubStructure(TreeNode *A, TreeNode *B);
+bool recur(TreeNode *A, TreeNode *B);
 
+// 二叉树的镜像
+TreeNode *mirrorTree(TreeNode *root);
 
+//对称的二叉树
+bool isSymmetric(TreeNode *root);
+bool symmetry(TreeNode *L, TreeNode *R);
 #endif

@@ -12,7 +12,7 @@ vector<int> levelOrder(TreeNode *root)
     queue<TreeNode *> mQue; //插入二叉树值的队列
 
     // root为空返回 ""
-    if (!root)
+    if (root == nullptr)
         return iRes;
 
     //队列mQue添加root
@@ -50,7 +50,7 @@ vector<vector<int>> levelOrder2(TreeNode *root)
     queue<TreeNode *> mQue;   //插入二叉树值的队列
 
     // root为空返回 ""
-    if (!root)
+    if (root == nullptr)
         return iRes;
 
     //队列mQue添加root
@@ -85,7 +85,7 @@ vector<vector<int>> levelOrder3(TreeNode *root)
 {
     deque<TreeNode *> mDeq;
     vector<vector<int>> iRes;
-    if (!root)
+    if (root == nullptr)
         return iRes;
     mDeq.push_back(root);
     while (!mDeq.empty())
@@ -146,11 +146,11 @@ bool isSubStructure(TreeNode *A, TreeNode *B)
 
 /**
  * @brief 判断节点值是否一样，一样的话继续递归判断子节点的值是否一样
- * 
- * @param A 
- * @param B 
- * @return true 
- * @return false 
+ *
+ *
+ *
+ * @return true
+ * @return false
  */
 bool recur(TreeNode *A, TreeNode *B)
 {
@@ -159,4 +159,48 @@ bool recur(TreeNode *A, TreeNode *B)
     if (A == nullptr || A->val != B->val)
         return false;
     return recur(A->left, B->left) && recur(A->right, B->right);
+}
+
+/**
+ * @brief 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+ *
+ * @param root
+ * @return TreeNode*
+ */
+
+TreeNode *mirrorTree(TreeNode *root)
+{
+    if (root == nullptr)
+        return nullptr;
+    //先暂存左子节点
+    TreeNode *tmp = root->left;
+    //对右子节点进行递归，返回的值给左子节点
+    root->left = mirrorTree(root->right);
+    //对暂存的左子节点递归，返回的值给右子节点
+    root->right = mirrorTree(tmp);
+    return root;
+}
+
+/**
+ * @brief  请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+ *
+ * @param root
+ * @return true
+ * @return false
+ */
+bool isSymmetric(TreeNode *root)
+{
+    //对比根节点的左子节点和右子节点
+    return (root == nullptr) || symmetry(root->left, root->right);
+}
+
+bool symmetry(TreeNode *L, TreeNode *R)
+{
+    if (L == nullptr && R == nullptr)
+        return true;
+    //判断值是否相等
+    if (L == nullptr || R == nullptr || L->val != R->val)
+        return false;
+    // L的左子节点和R的右子节点进行递归、L的右子节点和R的左子节点进行递归
+    return symmetry(L->left, R->right) && symmetry(L->right, R->left);
 }
