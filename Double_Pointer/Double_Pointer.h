@@ -32,4 +32,13 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB);
 //调整数组顺序使奇数位于偶数前面
 vector<int> exchange(vector<int> &nums);
 
+//调整数组顺序使奇数位于偶数前面
+vector<int> exchange(vector<int> &nums);
+
+//和为 s 的两个数字
+vector<int> twoSum(vector<int> &nums, int target);
+
+//翻转单词顺序
+string reverseWords(string s);
+
 #endif

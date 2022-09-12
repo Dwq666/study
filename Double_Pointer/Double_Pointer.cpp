@@ -111,3 +111,104 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
     }
     return A;
 }
+
+/**
+ * @brief 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分
+ *
+ * @param nums
+ * @return vector<int>
+ */
+vector<int> exchange(vector<int> &nums)
+{
+    int i = 0, j = nums.size() - 1;
+    while (i < j)
+    {
+        //从左向右循环找到偶数
+        while (i < j && (nums.at(i) % 2) == 1)
+            i++;
+        //从右向左循环找到奇数
+        while (i < j && (nums.at(j) % 2) == 0)
+            j--;
+        swap(nums.at(i), nums.at(j));
+    }
+    return nums;
+}
+
+/**
+ * @brief 输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+ *
+ * @param nums
+ * @param target
+ * @return vector<int>
+ */
+vector<int> twoSum(vector<int> &nums, int target)
+{
+    int i = 0, j = nums.size() - 1;
+    vector<int> ivec;
+    while (i < j)
+    {
+        //获取两数和
+        int s = nums.at(i) + nums.at(j);
+        //大于target
+        if (s > target)
+            j--;
+        //小于target
+        else if (s < target)
+            i++;
+        else
+        {
+            ivec.push_back(nums[i]);
+            ivec.push_back(nums[j]);
+            return ivec;
+        }
+    }
+    return {};
+}
+
+/**
+ * @brief 输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。
+ *       例如输入字符串"I am a student. "，则输出"student. a am I"。
+
+ *
+ * @param s
+ * @return string
+ */
+string reverseWords(string s)
+{
+    int left = 0, right = s.size() - 1;
+    //删除前后空白符
+    while (left <= right && s[left] == ' ')
+        left++;
+    while (left <= right && s[right] == ' ')
+        right--;
+
+    deque<string> sdeq;
+    string word;
+    while (left <= right)
+    {
+        char c = s[left];
+        if (c != ' ')
+            word += c;
+        else if (word.size() && c == ' ')
+        {
+            //加入队列头部
+            sdeq.push_front(move(word));
+            word = "";
+        }
+        left++;
+    }
+
+    sdeq.push_front(move(word));
+
+    string res;
+    while (!sdeq.empty())
+    {
+        //获得队列头部
+        res += sdeq.front();
+        //头部出队
+        sdeq.pop_front();
+        if (!sdeq.empty())
+            res += ' ';
+    }
+    return res;
+}
