@@ -36,4 +36,9 @@ TreeNode *mirrorTree(TreeNode *root);
 //对称的二叉树
 bool isSymmetric(TreeNode *root);
 bool symmetry(TreeNode *L, TreeNode *R);
+
+//矩阵中的路径
+int rows, cols;
+bool exist(vector<vector<char>> &board, string word);
+bool dfs(vector<vector<char>> &board, string word, int i, int j, int k);
 #endif
