@@ -221,7 +221,7 @@ bool exist(vector<vector<char>> &board, string word)
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
-        {   
+        {
             if (dfs(board, word, i, j, 0))
                 return true;
         }
@@ -229,7 +229,7 @@ bool exist(vector<vector<char>> &board, string word)
     return false;
 }
 bool dfs(vector<vector<char>> &board, string word, int i, int j, int k)
-{   
+{
     //判断值是否相等
     if (i >= rows || i < 0 || j >= cols || j < 0 || board[i][j] != word[k])
         return false;
@@ -242,4 +242,55 @@ bool dfs(vector<vector<char>> &board, string word, int i, int j, int k)
                dfs(board, word, i, j + 1, k + 1) || dfs(board, word, i, j - 1, k + 1);
     board[i][j] = word[k];
     return res;
+}
+
+/**
+ * @brief 地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。
+ * 一个机器人从坐标 [0, 0] 的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。
+ * 例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
+
+
+ *
+ * @param m
+ * @param n
+ * @param k
+ * @return int
+ */
+int movingCount(int m, int n, int k)
+{
+    vector<vector<bool>> bvec(m, vector<bool>(n, 0));
+    return dfsmovingCount(0, 0, 0, 0, bvec, m, n, k);
+}
+int dfsmovingCount(int i, int j, int si, int sj, vector<vector<bool>> &visited, int m, int n, int k)
+{
+    if (i >= m || j >= n || si + sj > k || visited[i][j])
+        return 0;
+    visited[i][j] = true;
+    return 1 + dfsmovingCount(i + 1, j, (i + 1) % 10 != 0 ? si + 1 : si - 8, sj, visited, m, n, k) +
+           dfsmovingCount(i, j + 1, si, (j + 1) % 10 != 0 ? sj + 1 : sj - 8, visited, m, n, k);
+}
+
+/**
+ * @brief 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。(叶子节点 是指没有子节点的节点)
+ *
+ * @param root
+ * @param target
+ * @return vector<vector<int>>
+ */
+vector<vector<int>> pathSum(TreeNode1 *root, int target)
+{
+    recurPathSum(root, target);
+    return res;
+}
+void recurPathSum(TreeNode1 *root, int tar)
+{
+    if (root == nullptr)
+        return;
+    path.push_back(root->val);
+    tar -= root->val;
+    if (tar == 0 && root->left == nullptr && root->right == nullptr)
+        res.push_back(path);
+    recurPathSum(root->left, tar);
+    recurPathSum(root->right, tar);
+    path.pop_back();
 }
